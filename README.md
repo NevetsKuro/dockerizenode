@@ -53,57 +53,59 @@ Create an empty file called Dockerfile:
 Open the Dockerfile in your favorite text editor
 
 The first thing we need to do is define from what image we want to build from. Here we will use the latest LTS (long term support) version 14 of node available from the Docker Hub:
-`FROM node:14`
+```
+FROM node:14
+```
 
 Next we create a directory to hold the application code inside the image, this will be the working directory for your application:
 
 ## Create app directory
-
-`WORKDIR /usr/src/app`
+```
+WORKDIR /usr/src/app
+```
 This image comes with Node.js and NPM already installed so the next thing we need to do is to install your app dependencies using the npm binary. Please note that if you are using npm version 4 or earlier a package-lock.json file will not be generated.
 
 ## Install app dependencies
 
-## A wildcard is used to ensure both package.json AND package-lock.json are copied
-
-## where available (npm@5+)
-
-`COPY package*.json ./`
+A wildcard is used to ensure both package.json AND package-lock.json are copied where available (npm@5+)
+```
+COPY package*.json ./
 
 RUN npm install
+```
 
 ## If you are building your code for production
-
-## RUN npm ci --only=production
-
+```
+RUN npm ci --only=production
+```
 Note that, rather than copying the entire working directory, we are only copying the package.json file. This allows us to take advantage of cached Docker layers. bitJudo has a good explanation of this here. Furthermore, the npm ci command, specified in the comments, helps provide faster, reliable, reproducible builds for production environments. You can read more about this here.
 
 To bundle your app's source code inside the Docker image, use the COPY instruction:
 
 ## Bundle app source
-
-`COPY . .`
+```
+COPY . .
+```
 Your app binds to port 8080 so you'll use the EXPOSE instruction to have it mapped by the docker daemon:
-
-`EXPOSE 8080`
+```
+EXPOSE 8080
+```
 Last but not least, define the command to run your app using CMD which defines your runtime. Here we will use node server.js to start your server:
-
 `CMD [ "node", "server.js" ]`
+
 Your Dockerfile should now look like this:
+```
+FROM node:14
 
-`FROM node:14`
+# Create app directory
 
-## Create app directory
-
-`WORKDIR /usr/src/app`
+WORKDIR /usr/src/app
 
 ## Install app dependencies
 
-## A wildcard is used to ensure both package.json AND package-lock.json are copied
+A wildcard is used to ensure both package.json AND package-lock.json are copied
+where available (npm@5+)
 
-## where available (npm@5+)
-
-```
 COPY package*.json ./
 
 RUN npm install
@@ -203,4 +205,4 @@ Hello world
 ```
 
 ---------OR-------------
-Refer to: <a href="https://nodejs.org/en/docs/guides/nodejs-docker-webapp/">alternate site</a>
+Refer to: <a href="https://nodejs.org/en/docs/guides/nodejs-docker-webapp/">official site of the doc</a>
